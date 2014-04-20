@@ -22,6 +22,15 @@
 		645AA84B1903AC6F00B84AC4 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 645AA82F1903AC6F00B84AC4 /* CoreData.framework */; };
 		645AA8531903AC6F00B84AC4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 645AA8511903AC6F00B84AC4 /* InfoPlist.strings */; };
 		645AA8551903AC6F00B84AC4 /* MemoryBlockTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 645AA8541903AC6F00B84AC4 /* MemoryBlockTests.m */; };
+		645AA8631903B45C00B84AC4 /* MMBPatternView.m in Sources */ = {isa = PBXBuildFile; fileRef = 645AA8621903B45C00B84AC4 /* MMBPatternView.m */; };
+		645AA8661903B46E00B84AC4 /* MMBScoreView.m in Sources */ = {isa = PBXBuildFile; fileRef = 645AA8651903B46E00B84AC4 /* MMBScoreView.m */; };
+		645AA8691903B48C00B84AC4 /* MMBPatternGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = 645AA8681903B48C00B84AC4 /* MMBPatternGrid.m */; };
+		645AA86D1903B53D00B84AC4 /* MMBRandomGridGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 645AA86C1903B53D00B84AC4 /* MMBRandomGridGenerator.m */; };
+		645AA8711903B67A00B84AC4 /* MMBGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 645AA86F1903B67A00B84AC4 /* MMBGameViewController.m */; };
+		645AA8741903B6E500B84AC4 /* MMBGameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 645AA8731903B6E500B84AC4 /* MMBGameViewController.xib */; };
+		645AA8761903B72700B84AC4 /* MMBScoreView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 645AA8751903B72700B84AC4 /* MMBScoreView.xib */; };
+		645AA87A1903B7C300B84AC4 /* MMBLobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 645AA8781903B7C300B84AC4 /* MMBLobbyViewController.m */; };
+		645AA87B1903B7C300B84AC4 /* MMBLobbyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 645AA8791903B7C300B84AC4 /* MMBLobbyViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +62,22 @@
 		645AA8501903AC6F00B84AC4 /* MemoryBlockTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MemoryBlockTests-Info.plist"; sourceTree = "<group>"; };
 		645AA8521903AC6F00B84AC4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		645AA8541903AC6F00B84AC4 /* MemoryBlockTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MemoryBlockTests.m; sourceTree = "<group>"; };
+		645AA8611903B45C00B84AC4 /* MMBPatternView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMBPatternView.h; sourceTree = "<group>"; };
+		645AA8621903B45C00B84AC4 /* MMBPatternView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMBPatternView.m; sourceTree = "<group>"; };
+		645AA8641903B46E00B84AC4 /* MMBScoreView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMBScoreView.h; sourceTree = "<group>"; };
+		645AA8651903B46E00B84AC4 /* MMBScoreView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMBScoreView.m; sourceTree = "<group>"; };
+		645AA8671903B48C00B84AC4 /* MMBPatternGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMBPatternGrid.h; sourceTree = "<group>"; };
+		645AA8681903B48C00B84AC4 /* MMBPatternGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMBPatternGrid.m; sourceTree = "<group>"; };
+		645AA86A1903B4BA00B84AC4 /* MMBGridGenerating.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMBGridGenerating.h; sourceTree = "<group>"; };
+		645AA86B1903B53D00B84AC4 /* MMBRandomGridGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMBRandomGridGenerator.h; sourceTree = "<group>"; };
+		645AA86C1903B53D00B84AC4 /* MMBRandomGridGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMBRandomGridGenerator.m; sourceTree = "<group>"; };
+		645AA86E1903B67A00B84AC4 /* MMBGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMBGameViewController.h; sourceTree = "<group>"; };
+		645AA86F1903B67A00B84AC4 /* MMBGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMBGameViewController.m; sourceTree = "<group>"; };
+		645AA8731903B6E500B84AC4 /* MMBGameViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MMBGameViewController.xib; sourceTree = "<group>"; };
+		645AA8751903B72700B84AC4 /* MMBScoreView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MMBScoreView.xib; sourceTree = "<group>"; };
+		645AA8771903B7C300B84AC4 /* MMBLobbyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMBLobbyViewController.h; sourceTree = "<group>"; };
+		645AA8781903B7C300B84AC4 /* MMBLobbyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMBLobbyViewController.m; sourceTree = "<group>"; };
+		645AA8791903B7C300B84AC4 /* MMBLobbyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MMBLobbyViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +140,9 @@
 		645AA8311903AC6F00B84AC4 /* MemoryBlock */ = {
 			isa = PBXGroup;
 			children = (
+				645AA8601903B41A00B84AC4 /* Model */,
+				645AA85F1903B41400B84AC4 /* Controller */,
+				645AA85E1903B3FF00B84AC4 /* View */,
 				645AA83A1903AC6F00B84AC4 /* MMBAppDelegate.h */,
 				645AA83B1903AC6F00B84AC4 /* MMBAppDelegate.m */,
 				645AA8401903AC6F00B84AC4 /* Images.xcassets */,
@@ -151,6 +179,43 @@
 				645AA8511903AC6F00B84AC4 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		645AA85E1903B3FF00B84AC4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				645AA8611903B45C00B84AC4 /* MMBPatternView.h */,
+				645AA8621903B45C00B84AC4 /* MMBPatternView.m */,
+				645AA8641903B46E00B84AC4 /* MMBScoreView.h */,
+				645AA8651903B46E00B84AC4 /* MMBScoreView.m */,
+				645AA8751903B72700B84AC4 /* MMBScoreView.xib */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		645AA85F1903B41400B84AC4 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				645AA8731903B6E500B84AC4 /* MMBGameViewController.xib */,
+				645AA86E1903B67A00B84AC4 /* MMBGameViewController.h */,
+				645AA86F1903B67A00B84AC4 /* MMBGameViewController.m */,
+				645AA8771903B7C300B84AC4 /* MMBLobbyViewController.h */,
+				645AA8781903B7C300B84AC4 /* MMBLobbyViewController.m */,
+				645AA8791903B7C300B84AC4 /* MMBLobbyViewController.xib */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		645AA8601903B41A00B84AC4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				645AA8671903B48C00B84AC4 /* MMBPatternGrid.h */,
+				645AA8681903B48C00B84AC4 /* MMBPatternGrid.m */,
+				645AA86A1903B4BA00B84AC4 /* MMBGridGenerating.h */,
+				645AA86B1903B53D00B84AC4 /* MMBRandomGridGenerator.h */,
+				645AA86C1903B53D00B84AC4 /* MMBRandomGridGenerator.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -229,8 +294,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				645AA8761903B72700B84AC4 /* MMBScoreView.xib in Resources */,
+				645AA8741903B6E500B84AC4 /* MMBGameViewController.xib in Resources */,
 				645AA8361903AC6F00B84AC4 /* InfoPlist.strings in Resources */,
 				645AA8411903AC6F00B84AC4 /* Images.xcassets in Resources */,
+				645AA87B1903B7C300B84AC4 /* MMBLobbyViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,9 +317,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				645AA8631903B45C00B84AC4 /* MMBPatternView.m in Sources */,
+				645AA8691903B48C00B84AC4 /* MMBPatternGrid.m in Sources */,
+				645AA8661903B46E00B84AC4 /* MMBScoreView.m in Sources */,
 				645AA83F1903AC6F00B84AC4 /* MemoryBlock.xcdatamodeld in Sources */,
 				645AA8381903AC6F00B84AC4 /* main.m in Sources */,
+				645AA87A1903B7C300B84AC4 /* MMBLobbyViewController.m in Sources */,
 				645AA83C1903AC6F00B84AC4 /* MMBAppDelegate.m in Sources */,
+				645AA86D1903B53D00B84AC4 /* MMBRandomGridGenerator.m in Sources */,
+				645AA8711903B67A00B84AC4 /* MMBGameViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
