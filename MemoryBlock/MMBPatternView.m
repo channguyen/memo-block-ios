@@ -12,7 +12,7 @@
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1.0]
 #define HEX(c)       [UIColor colorWithRed:((c>>16)&0xFF)/255.0 green:((c>>8)&0xFF)/255.0 blue:(c&0xFF)/255.0 alpha:1.0]
 
-static const float CVThickness = 4.0f;
+static const float MMBThickness = 4.0f;
 
 typedef struct {
     int r;
@@ -81,15 +81,15 @@ typedef struct {
 - (void)drawGrid:(CGRect)container {
     NSInteger row = self.patternGrid.row;
     NSInteger column = self.patternGrid.column;
-    int w = (container.size.width - 2 * CVThickness) / column;
-    int h = (container.size.height - 2 * CVThickness) / row;
+    int w = (container.size.width - 2 * MMBThickness) / column;
+    int h = (container.size.height - 2 * MMBThickness) / row;
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(context, CVThickness);
-    float x = CVThickness;
-    float y = CVThickness;
+    CGContextSetLineWidth(context, MMBThickness);
+    float x = MMBThickness;
+    float y = MMBThickness;
     Cell cell;
     for (int r = 0; r < row; ++r) {
-        x = CVThickness;
+        x = MMBThickness;
         for (int c = 0; c < column; ++c) {
             cell.r = r;
             cell.c = c;
@@ -98,6 +98,7 @@ typedef struct {
         }
         y += h;
     }
+    // CGContextRelease(context);
 }
 
 - (void)drawSquare:(CGRect)rect inContext:(CGContextRef) context atCell:(Cell) cell{

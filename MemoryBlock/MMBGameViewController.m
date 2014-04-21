@@ -25,6 +25,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.patternView.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning {

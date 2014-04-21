@@ -8,6 +8,7 @@
 
 #import "MMBLobbyViewController.h"
 #import "MMBGameViewController.h"
+#import "MMBHighScoreViewController.h"
 
 @interface MMBLobbyViewController ()
 
@@ -34,9 +35,9 @@
 }
 
 - (IBAction)newGameClick:(id)sender {
-    MMBGameViewController *gameViewController = [[MMBGameViewController alloc] initWithNibName:@"MMBGameViewController" bundle:nil];
+    MMBGameViewController *vc = [[MMBGameViewController alloc] initWithNibName:@"MMBGameViewController" bundle:nil];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.navigationController pushViewController:gameViewController animated:YES];
+        [self.navigationController pushViewController:vc animated:YES];
     });
 }
 
@@ -49,7 +50,10 @@
 }
 
 - (IBAction)highscoreClick:(id)sender {
-    
+    MMBHighScoreViewController *vc = [[MMBHighScoreViewController alloc] init];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.navigationController pushViewController:vc animated:YES];
+    });
 }
 
 @end

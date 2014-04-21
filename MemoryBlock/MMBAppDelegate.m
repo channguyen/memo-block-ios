@@ -139,4 +139,16 @@
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
+
+#pragma mark - Perisist Highscore
+
+- (NSArray *)fetchAllHighScore {
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"HighScore" inManagedObjectContext:self.managedObjectContext];
+    [request setEntity:entity];
+    NSError *error;
+    NSArray *dataSet = [self.managedObjectContext executeFetchRequest:request error:&error];
+    return dataSet;
+}
+
 @end

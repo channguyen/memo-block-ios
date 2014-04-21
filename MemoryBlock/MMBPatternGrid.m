@@ -63,6 +63,7 @@
 }
 
 - (void)freeGrid {
+    NSLog(@"freeGrid");
     for (int i = 0; i < _row; ++i) {
         free(_grid[i]);
     }
