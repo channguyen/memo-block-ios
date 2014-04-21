@@ -31,8 +31,8 @@
                 <color key="backgroundColor" red="0.60000002384185791" green="0.60000002384185791" blue="0.60000002384185791" alpha="1" colorSpace="calibratedRGB"/>
             </tableViewCellContentView>
             <connections>
-                <outlet property="labelDate" destination="WQ5-uN-i3r" id="9x0-29-QeQ"/>
-                <outlet property="labelScore" destination="WQ5-uN-i3r" id="lgC-Yn-xaf"/>
+                <outlet property="labelDate" destination="FiA-5q-hS9" id="PtZ-P0-SS2"/>
+                <outlet property="labelScore" destination="WQ5-uN-i3r" id="Cnt-TT-qtn"/>
             </connections>
         </tableViewCell>
     </objects>

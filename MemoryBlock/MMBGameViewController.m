@@ -7,9 +7,13 @@
 //
 
 #import "MMBGameViewController.h"
+#import "MMBAppDelegate.h"
 #import "MMBPatternView.h"
+#import "HighScore.h"
 
 @interface MMBGameViewController ()
+
+@property (retain, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @end
 
@@ -26,6 +30,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.patternView.delegate = self;
+    MMBAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    self.managedObjectContext = appDelegate.managedObjectContext;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -39,6 +45,13 @@
 
 - (void)nextClick:(id)sender {
     [self.currentScoreView addScoreToCurrent:4];
+    HighScore *hs = [NSEntityDescription insertNewObjectForEntityForName:@"HighScore" inManagedObjectContext:self.managedObjectContext];
+    hs.score = [NSNumber numberWithInt:2048];
+    hs.date = @"04-02-2014";
+    NSError *error;
+    if (![self.managedObjectContext save:&error]) {
+        NSLog(@"Wait a minute, save failed? ....");
+    }
 }
 
 @end

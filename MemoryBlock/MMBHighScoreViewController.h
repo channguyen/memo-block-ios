@@ -12,4 +12,6 @@
     NSMutableArray *_highScoreArray;
 }
 
+@property (retain, nonatomic) NSManagedObjectContext *managedObjectContext;
+
 @end

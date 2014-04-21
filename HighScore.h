@@ -1,5 +1,5 @@
 //
-//  Highscore.h
+//  HighScore.h
 //  MemoryBlock
 //
 //  Created by chan on 4/20/14.
@@ -10,9 +10,9 @@
 #import <CoreData/CoreData.h>
 
 
-@interface Highscore : NSManagedObject
+@interface HighScore : NSManagedObject
 
-@property (nonatomic, retain) NSNumber *score;
-@property (nonatomic, retain) NSString *date;
+@property (nonatomic, retain) NSNumber * score;
+@property (nonatomic, retain) NSString * date;
 
 @end

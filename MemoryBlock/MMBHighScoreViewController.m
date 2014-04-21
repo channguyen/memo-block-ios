@@ -1,5 +1,4 @@
-//
-//  MMBHighScoreViewController.m
+// //  MMBHighScoreViewController.m
 //  MemoryBlock
 //
 //  Created by chan on 4/20/14.
@@ -9,6 +8,8 @@
 #import "MMBHighScoreViewController.h"
 #import "MMBHighScore.h"
 #import "MMBScoreViewCell.h"
+#import "MMBAppDelegate.h"
+#import "HighScore.h"
 
 @interface MMBHighScoreViewController ()
 
@@ -22,10 +23,6 @@
         UINavigationItem *navigationItem = self.navigationItem;
         navigationItem.title = @"Highscore";
         _highScoreArray = [[NSMutableArray alloc] init];
-        [_highScoreArray addObject:[[MMBHighScore alloc] initWihtScore:100 date:@"Just now"]];
-        [_highScoreArray addObject:[[MMBHighScore alloc] initWihtScore:101 date:@"2 hours ago"]];
-        [_highScoreArray addObject:[[MMBHighScore alloc] initWihtScore:102 date:@"5 hours ago"]];
-        [_highScoreArray addObject:[[MMBHighScore alloc] initWihtScore:103 date:@"24 days ago"]];
     }
     return self;
 }
@@ -39,6 +36,10 @@
     [super viewDidLoad];
     UINib *nib = [UINib nibWithNibName:@"MMBScoreViewCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:@"MMBScoreViewCell"];
+    
+    MMBAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    self.managedObjectContext = appDelegate.managedObjectContext;
+    _highScoreArray = [[appDelegate fetchAllHighScore] mutableCopy];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -57,9 +58,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MMBScoreViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MMBScoreViewCell" forIndexPath:indexPath];
-    MMBHighScore *highScore = _highScoreArray[indexPath.row];
-    NSLog(@"%@", [NSString stringWithFormat:@"%ld, %@", highScore.score, highScore.date]);
-    [[cell labelScore] setText:[NSString stringWithFormat:@"%ld", highScore.score]];
+    HighScore *highScore = _highScoreArray[indexPath.row];
+    [[cell labelScore] setText:[highScore.score stringValue]];
     [[cell labelDate] setText:highScore.date];
     return cell;
 }

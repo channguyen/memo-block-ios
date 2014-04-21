@@ -19,5 +19,6 @@
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
+- (NSArray *)fetchAllHighScore;
 
 @end
