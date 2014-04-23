@@ -6,7 +6,6 @@
 //
 
 #import "MMBHighScoreViewController.h"
-#import "MMBHighScore.h"
 #import "MMBScoreViewCell.h"
 #import "MMBAppDelegate.h"
 #import "HighScore.h"

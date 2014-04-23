@@ -18,7 +18,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    MMBLobbyViewController *lobbyViewController = [[MMBLobbyViewController alloc] initWithNibName:@"MMBLobbyViewController" bundle:nil];
+    MMBLobbyViewController *lobbyViewController = [[MMBLobbyViewController alloc] init];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:lobbyViewController];
     [self.window setRootViewController:self.navigationController];
     self.window.backgroundColor = [UIColor whiteColor];

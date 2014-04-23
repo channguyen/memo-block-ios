@@ -9,7 +9,13 @@
 #import "MMBPatternGrid.h"
 #import "MMBRandomGridGenerator.h"
 
-@implementation MMBPatternGrid
+static const int PGEmpty = 0;
+static const int PGMarked = 1;
+static const int PGMarkRemoved = 2;
+
+@implementation MMBPatternGrid {
+    int **_grid;
+}
 
 @synthesize row = _row;
 @synthesize column = _column;
@@ -36,10 +42,10 @@
     return _count;
 }
 
-- (bool**)allocateNewGrid:(NSInteger)row column:(NSInteger)column {
-    bool **p = malloc(row * sizeof(bool*));
+- (int **)allocateNewGrid:(NSInteger)row column:(NSInteger)column {
+    int **p = malloc(row * sizeof(int *));
     for (int i = 0; i < row; ++i) {
-        p[i] = malloc(column * sizeof(bool));
+        p[i] = malloc(column * sizeof(int));
     }
     return p;
 }
@@ -55,11 +61,25 @@
     if (![self isValidRow:row column:column]) {
         return NO;
     }
-    return _grid[row][column] ? YES : NO;
+    return _grid[row][column] == PGMarked || _grid[row][column] == PGMarkRemoved;
+}
+
+- (BOOL)isRemovedMarkAtRow:(NSInteger)row column:(NSInteger)column {
+    if (![self isValidRow:row column:column]) {
+        return NO;
+    }
+    return _grid[row][column] == PGMarkRemoved;
+}
+
+- (void)removeMarkAt:(NSInteger)row column:(NSInteger)column {
+    if (![self isValidRow:row column:column] || _grid[row][column] == PGEmpty) {
+        return;
+    }
+    _grid[row][column] = PGMarkRemoved;
 }
 
 - (BOOL)isValidRow:(NSInteger)row column:(NSInteger)column {
-    return 0 <= row && row <= self.row && 0 <= column && column <= self.column;
+    return 0 <= row && row < self.row && 0 <= column && column < self.column;
 }
 
 - (void)freeGrid {
@@ -83,6 +103,18 @@
         [s stringByAppendingString:@"\n"];
     }
     return s;
+}
+
+- (NSInteger)numberOfMarkBeingRemoved {
+    int cnt = 0;
+    for (int r = 0; r < _row; ++r) {
+        for (int c = 0; c < _column; ++c) {
+            if (_grid[r][c] == PGMarkRemoved) {
+                cnt++;
+            }
+        }
+    }
+    return cnt;
 }
 
 @end

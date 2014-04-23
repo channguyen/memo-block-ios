@@ -11,6 +11,6 @@
 @protocol MMBGridGenerating <NSObject>
 
 @required
-- (NSInteger) generateGrid:(bool **)grid row:(NSInteger)row column:(NSInteger)column;
+- (NSInteger) generateGrid:(int **)grid row:(NSInteger)row column:(NSInteger)column;
 
 @end

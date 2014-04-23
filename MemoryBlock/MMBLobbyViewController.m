@@ -9,6 +9,7 @@
 #import "MMBLobbyViewController.h"
 #import "MMBGameViewController.h"
 #import "MMBHighScoreViewController.h"
+#import "MMBSettingsViewController.h"
 
 @interface MMBLobbyViewController ()
 
@@ -16,8 +17,8 @@
 
 @implementation MMBLobbyViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+- (id)init {
+    self = [super initWithNibName:@"MMBLobbyViewController" bundle:nil];
     if (self) {
         // Custom initialization
     }
@@ -46,7 +47,10 @@
 }
 
 - (IBAction)settingsClick:(id)sender {
-    
+    MMBSettingsViewController *vc = [[MMBSettingsViewController alloc] initWithNibName:@"MMBSettingsViewController" bundle:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.navigationController pushViewController:vc animated:YES];
+    });
 }
 
 - (IBAction)highscoreClick:(id)sender {

@@ -20,22 +20,22 @@ static const int MMBRandomNumber = 7;
     return self;
 }
 
-- (NSInteger)generateGrid:(bool **)grid row:(NSInteger)row column:(NSInteger)column {
+- (NSInteger)generateGrid:(int **)grid row:(NSInteger)row column:(NSInteger)column {
     int count = 0;
     for (int r = 0; r < row; ++r) {
         for (int c = 0; c < column; ++c) {
             if ((arc4random() % MMBRandomNumber) == 0) {
-                grid[r][c] = true;
+                grid[r][c] = 1;
                 count++;
             } else {
-                grid[r][c] = false;
+                grid[r][c] = 0;
             }
         }
     }
     int randomRow = arc4random() % row;
     int randomColumn  = arc4random() % row;
     if (count == 0) {
-        grid[randomRow][randomColumn] = true;
+        grid[randomRow][randomColumn] = 1;
         count++;
     }
     return count;

@@ -49,8 +49,8 @@
 }
 
 - (void)setCurrentScore:(NSInteger)score {
-    self.score = score;
-    [self.labelScore setText:[NSString stringWithFormat:@"%ld", self.score]];
+    long newScore = self.score = score;
+    [self.labelScore setText:[NSString stringWithFormat:@"%ld", newScore]];
     [self.labelScore setNeedsDisplay];
 }
 
