@@ -12,7 +12,7 @@
 @class MMBPatternView;
 @class MMBCell;
 
-typedef NS_ENUM(NSUInteger, MoveState) {
+typedef NS_ENUM(NSInteger, MoveState) {
     NEUTRAL,
     LOST,
     WON

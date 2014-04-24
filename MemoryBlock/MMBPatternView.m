@@ -13,7 +13,7 @@
 #define RGB(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1.0]
 #define HEX(c)       [UIColor colorWithRed:((c>>16)&0xFF)/255.0 green:((c>>8)&0xFF)/255.0 blue:(c&0xFF)/255.0 alpha:1.0]
 
-static const float MMBThickness = 4.0f;
+static const float MMBThickness = 6.0f;
 
 @interface MMBPatternView() {
     UIColor *_borderColor;
@@ -37,9 +37,9 @@ static const float MMBThickness = 4.0f;
     self.userInteractionEnabled = YES;
     
     // Private
-    _borderColor = HEX(0x31748f);
-    _emptySquareColor = HEX(0xe6e6fa);
-    _patternSquareColor = HEX(0xff3016);
+    _borderColor = HEX(0x66594C);
+    _emptySquareColor = HEX(0xCCB299);
+    _patternSquareColor = HEX(0xffd6dbe1);
     _wrongSquareColor = HEX(0x000000);
     _activeCell = [[MMBCell alloc] initWithRow:-1 column:-1];
     _touchable = NO;
@@ -48,6 +48,11 @@ static const float MMBThickness = 4.0f;
     _moveState = WON;
     _crossImage = [UIImage imageNamed:@"wrong_marker.png"];
     _checkImage = [UIImage imageNamed:@"correct_marker.png"];
+    
+    self.layer.cornerRadius = 10.0;
+    self.layer.borderColor = [[UIColor grayColor] CGColor];
+    self.layer.borderWidth = 4;
+    
     return self;
 }
 

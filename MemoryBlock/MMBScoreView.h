@@ -11,9 +11,11 @@
 @interface MMBScoreView : UIView
 
 @property (strong, nonatomic) IBOutlet UILabel *labelScore;
+@property (strong, nonatomic) IBOutlet UILabel *labelHeader;
 @property (strong, nonatomic) IBOutlet UIView *view;
 @property (assign, nonatomic) NSInteger score;
 
+- (void)setHeaderLabel:(NSString *)label;
 - (void)addScoreToCurrent:(NSInteger)score;
 - (void)setCurrentScore:(NSInteger)score;
 

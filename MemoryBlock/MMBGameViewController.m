@@ -12,11 +12,24 @@
 #import "HighScore.h"
 #import "MMBPatternGrid.h"
 #import "MMBCell.h"
+#import "MMBScoreView.h"
+#import "MMBColorUtility.h"
 
-static const long MMBClearBlockTime = 2;
+static const double GVClearBlockDelayTime = 2.0;
+static const double GVNextGameDelayTime = 1.0;
+
+static const int GVMinimumRow = 3;
+static const int GVMinimumColumn = 3;
+static const int GVMaximumRow = 6;
+static const int GVMaximumColumn = 6;
+static const int GVTotalNumberOfGame = 10;
 
 @interface MMBGameViewController () {
     MMBPatternGrid *_patternGrid;
+    int _currentNumberOfRow;
+    int _currentNumberOfColumn;
+    int _currentGameCount;
+    int _currentScore;
 }
 
 @property (retain, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -36,34 +49,112 @@ static const long MMBClearBlockTime = 2;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSLog(@"viewDidLoad");
+    [self.view setBackgroundColor:UICOLOR_HEX(0xE6D8CC)];
+    [_patternView setBackgroundColor:UICOLOR_HEX(0xE6D8CC)];
+    
+    _currentNumberOfRow = GVMinimumRow;
+    _currentNumberOfColumn = GVMinimumColumn;
+    _currentScore = 0;
+    
+    // Set up score label
+    [_currentScoreView setHeaderLabel:@"Score"];
+    [_currentScoreView setCurrentScore:0];
+    [_bestScoreView setHeaderLabel:@"Best Score"];
+    [_bestScoreView setCurrentScore:[[NSUserDefaults standardUserDefaults] integerForKey:@"bestScore"]];
     
     // Set new grid now
-    self.patternView.delegate = self;
-    [self makeNewGameWithRow:5 column:5];
+    _patternView.delegate = self;
+    [self makeNewGameWithRow:_currentNumberOfRow column:_currentNumberOfColumn];
     
     // Load preferences 
     MMBAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     self.managedObjectContext = appDelegate.managedObjectContext;
     
     // Schedule a new timer to clear all the blocks
-    [NSTimer scheduledTimerWithTimeInterval:MMBClearBlockTime target:self selector:@selector(clearBlocks:) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:GVClearBlockDelayTime target:self selector:@selector(clearBlocks:) userInfo:nil repeats:NO];
 }
      
 - (void)clearBlocks:(NSTimer *)timer {
-    [self.patternView acceptTouchesAndClearBlock];
+    [_patternView acceptTouchesAndClearBlock];
 }
 
 - (void)makeNewGameWithRow:(NSInteger)row column:(NSInteger)column {
+    _currentScore = 0;
     _patternGrid = [[MMBPatternGrid alloc] initWithRow:row column:column];
     [_patternView setPatternGrid:_patternGrid];
     [_patternView setActiveCell:[[MMBCell alloc] initWithRow:-1 column:-1] toState:NEUTRAL];
     [_patternView setNeedsDisplay];
-    [NSTimer scheduledTimerWithTimeInterval:MMBClearBlockTime target:self selector:@selector(clearBlocks:) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:GVClearBlockDelayTime target:self selector:@selector(clearBlocks:) userInfo:nil repeats:NO];
+}
+
+- (int)nextRow {
+    _currentNumberOfRow++;
+    if (_currentNumberOfRow > GVMaximumRow) {
+        _currentNumberOfRow = GVMaximumRow;
+    }
+    return _currentNumberOfRow;
+}
+
+- (int)nextColumn {
+    _currentNumberOfColumn++;
+    if (_currentNumberOfColumn > GVMaximumColumn) {
+        _currentNumberOfColumn = GVMaximumColumn;
+    }
+    return _currentNumberOfColumn;
+}
+
+- (BOOL)isLastGame {
+    return _currentGameCount == GVTotalNumberOfGame;
+}
+
+- (void)makeNextGame:(NSTimer *)timer {
+    NSDictionary *lastMoveInfo = [timer userInfo];
+    MoveState state = [lastMoveInfo[@"state"] intValue];
+    _currentGameCount++;
+    if ([self isLastGame]) {
+        [self showCongratsDialog];
+    } else {
+        if (state == WON) {
+            [self makeNewGameWithRow:[self nextRow] column:[self nextColumn]];
+        } else {
+            [self makeNewGameWithRow:_currentNumberOfRow column:_currentNumberOfColumn];
+        }
+    }
 }
 
 - (void)makeNewGame {
-    [self makeNewGameWithRow:5 column:5];
+    _currentNumberOfRow = GVMinimumRow;
+    _currentNumberOfColumn = GVMinimumColumn;
+    _currentGameCount = 0;
+    [self makeNewGameWithRow:_currentNumberOfRow column:_currentNumberOfColumn];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
+    if ([title isEqualToString:@"OK"]) {
+        NSInteger bestScore = [[NSUserDefaults standardUserDefaults] integerForKey:@"bestScore"];
+        [self.currentScoreView setCurrentScore:0];
+        [self.bestScoreView setCurrentScore:bestScore];
+        [self makeNewGame];
+    }
+}
+
+- (void)showCongratsDialog {
+    NSString *msg = [NSString stringWithFormat:@"Your new highscore %d", self.currentScoreView.score];
+    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Congratulation!"
+                                                      message:msg
+                                                     delegate:self
+                                            cancelButtonTitle:@"OK"
+                                            otherButtonTitles:nil];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSInteger bestScore = [defaults integerForKey:@"bestScore"];
+    NSInteger currentScore = self.currentScoreView.score;
+    if (currentScore > bestScore) {
+        bestScore = currentScore;
+        [defaults setInteger:bestScore forKey:@"bestScore"];
+    }
+    [message show];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -84,12 +175,17 @@ static const long MMBClearBlockTime = 2;
         [_patternView setActiveCell:cell toState:LOST];
         [_patternView displayPattern];
         [_patternView rejectTouches];
-        [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(makeNewGame) userInfo:nil repeats:NO];
+        NSDictionary *lastMoveInfo = @{@"state" : [NSNumber numberWithInt:LOST]};
+        [NSTimer scheduledTimerWithTimeInterval:GVNextGameDelayTime target:self selector:@selector(makeNextGame:) userInfo:lastMoveInfo repeats:NO];
     } else if ([self isWinningMoveCell:cell]) {
         [_patternView setActiveCell:cell toState:WON];
         [_patternView displayPattern];
         [_patternView rejectTouches];
-        [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(makeNewGame) userInfo:nil repeats:NO];
+        NSDictionary *lastMoveInfo = @{@"state" : [NSNumber numberWithInt:WON]};
+        [NSTimer scheduledTimerWithTimeInterval:GVNextGameDelayTime target:self selector:@selector(makeNextGame:) userInfo:lastMoveInfo repeats:NO];
+        _currentScore += _patternGrid.score;
+        NSLog(@"current score = %d", _currentScore);
+        [_currentScoreView addScoreToCurrent:_patternGrid.score];
     }
     [_patternView setNeedsDisplay];
 }

@@ -7,6 +7,7 @@
 //
 
 #import "MMBScoreView.h"
+#import "MMBColorUtility.h"
 
 @interface MMBScoreView ()
 
@@ -40,18 +41,26 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     [self addSubview:self.view];
+    [self.subviews[0] setBackgroundColor:UICOLOR_HEX(0x75706A)];
+    [self.labelHeader setTextColor:UICOLOR_HEX(0xEEE5DD)];
+    [self.labelScore setTextColor:UICOLOR_HEX(0xFFFFFF)];
 }
 
 - (void)addScoreToCurrent:(NSInteger)score {
-    NSLog(@"Add score...");
     self.score += score;
     [self setCurrentScore:self.score];
 }
 
 - (void)setCurrentScore:(NSInteger)score {
-    long newScore = self.score = score;
-    [self.labelScore setText:[NSString stringWithFormat:@"%ld", newScore]];
+    NSLog(@"Set score to: %d", score);
+    self.score = score;
+    [self.labelScore setText:[NSString stringWithFormat:@"%d", self.score]];
     [self.labelScore setNeedsDisplay];
+    [self setNeedsDisplay];
+}
+
+- (void)setHeaderLabel:(NSString *)label {
+    [self.labelHeader setText:label];
 }
 
 @end

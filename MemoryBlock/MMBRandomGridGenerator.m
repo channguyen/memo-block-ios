@@ -33,7 +33,7 @@ static const int MMBRandomNumber = 7;
         }
     }
     int randomRow = arc4random() % row;
-    int randomColumn  = arc4random() % row;
+    int randomColumn  = arc4random() % column;
     if (count == 0) {
         grid[randomRow][randomColumn] = 1;
         count++;

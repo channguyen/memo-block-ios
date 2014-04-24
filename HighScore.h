@@ -12,7 +12,7 @@
 
 @interface HighScore : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * score;
-@property (nonatomic, retain) NSString * date;
+@property (nonatomic, retain) NSNumber *score;
+@property (nonatomic, retain) NSString *date;
 
 @end

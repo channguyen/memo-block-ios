@@ -97,6 +97,7 @@
 		64B5C11C19049CAA00F3FA43 /* MMBScoreViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MMBScoreViewCell.xib; sourceTree = "<group>"; };
 		64E93A411907931700852ECF /* MMBCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMBCell.h; sourceTree = "<group>"; };
 		64E93A421907931700852ECF /* MMBCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMBCell.m; sourceTree = "<group>"; };
+		64E93AEE1908D86B00852ECF /* MMBColorUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMBColorUtility.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +169,7 @@
 		645AA8311903AC6F00B84AC4 /* MemoryBlock */ = {
 			isa = PBXGroup;
 			children = (
+				64E93AED1908D84900852ECF /* Utility */,
 				645AA8601903B41A00B84AC4 /* Model */,
 				645AA85F1903B41400B84AC4 /* Controller */,
 				645AA85E1903B3FF00B84AC4 /* View */,
@@ -255,6 +257,14 @@
 				64E93A421907931700852ECF /* MMBCell.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		64E93AED1908D84900852ECF /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				64E93AEE1908D86B00852ECF /* MMBColorUtility.h */,
+			);
+			name = Utility;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

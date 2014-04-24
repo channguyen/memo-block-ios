@@ -10,6 +10,7 @@
 #import "MMBGameViewController.h"
 #import "MMBHighScoreViewController.h"
 #import "MMBSettingsViewController.h"
+#import "MMBColorUtility.h"
 
 @interface MMBLobbyViewController ()
 
@@ -27,7 +28,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    [self.view setBackgroundColor:UICOLOR_HEX(0xE6D8CC)];
+    [self.buttonHighscore setTitleColor:UICOLOR_HEX(0xff888a85) forState:UIControlStateNormal];
+    [self.buttonResume setTitleColor:UICOLOR_HEX(0xff888a85) forState:UIControlStateNormal];
+    [self.buttonNewGame setTitleColor:UICOLOR_HEX(0xff888a85) forState:UIControlStateNormal];
+    [self.buttonSettings setTitleColor:UICOLOR_HEX(0xff888a85) forState:UIControlStateNormal];
 }
 
 - (void)didReceiveMemoryWarning {
