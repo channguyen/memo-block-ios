@@ -48,11 +48,6 @@ static const float MMBThickness = 6.0f;
     _moveState = WON;
     _crossImage = [UIImage imageNamed:@"wrong_marker.png"];
     _checkImage = [UIImage imageNamed:@"correct_marker.png"];
-    
-    self.layer.cornerRadius = 10.0;
-    self.layer.borderColor = [[UIColor grayColor] CGColor];
-    self.layer.borderWidth = 4;
-    
     return self;
 }
 
@@ -80,12 +75,12 @@ static const float MMBThickness = 6.0f;
     [self drawGrid:rect];
 }
 
-- (void)drawGrid:(CGRect)container {
+- (void)drawGrid:(CGRect)rect {
     if (_patternGrid) {
         NSInteger row = _patternGrid.row;
         NSInteger column = _patternGrid.column;
-        int w = (container.size.width - 2 * MMBThickness) / column;
-        int h = (container.size.height - 2 * MMBThickness) / row;
+        int w = (rect.size.width - 2 * MMBThickness) / column;
+        int h = (rect.size.height - 2 * MMBThickness) / row;
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextSetLineWidth(context, MMBThickness);
         float x = MMBThickness;

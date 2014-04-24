@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 chan. All rights reserved.
 //
 
+#import <AudioToolbox/AudioToolbox.h>
+
 #import "MMBGameViewController.h"
 #import "MMBAppDelegate.h"
 #import "MMBPatternView.h"
@@ -18,8 +20,8 @@
 static const double GVClearBlockDelayTime = 2.0;
 static const double GVNextGameDelayTime = 1.0;
 
-static const int GVMinimumRow = 3;
-static const int GVMinimumColumn = 3;
+static const int GVMinimumRow = 4;
+static const int GVMinimumColumn = 4;
 static const int GVMaximumRow = 6;
 static const int GVMaximumColumn = 6;
 static const int GVTotalNumberOfGame = 10;
@@ -30,6 +32,10 @@ static const int GVTotalNumberOfGame = 10;
     int _currentNumberOfColumn;
     int _currentGameCount;
     int _currentScore;
+    
+    SystemSoundID _moveSoundId;
+    SystemSoundID _wrongMoveSoundId;
+    SystemSoundID _completeMoveSoundId;
 }
 
 @property (retain, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -72,6 +78,14 @@ static const int GVTotalNumberOfGame = 10;
     
     // Schedule a new timer to clear all the blocks
     [NSTimer scheduledTimerWithTimeInterval:GVClearBlockDelayTime target:self selector:@selector(clearBlocks:) userInfo:nil repeats:NO];
+    
+    // Set up game sound
+    NSURL *moveSoundURL = [[NSBundle mainBundle] URLForResource:@"tap" withExtension: @"aif"];
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)moveSoundURL, &_moveSoundId);
+}
+
+- (void)playMoveSound {
+    AudioServicesPlaySystemSound(_moveSoundId);
 }
      
 - (void)clearBlocks:(NSTimer *)timer {
@@ -170,6 +184,7 @@ static const int GVTotalNumberOfGame = 10;
 }
 
 - (void)patternView:(MMBPatternView *)patternView makeMoveAtCell:(MMBCell *)cell {
+    [self playMoveSound];
     [_patternGrid removeMarkAt:cell.row column:cell.column];
     if ([self isWrongMoveCell:cell]) {
         [_patternView setActiveCell:cell toState:LOST];
@@ -199,6 +214,10 @@ static const int GVTotalNumberOfGame = 10;
     if (![self.managedObjectContext save:&error]) {
         NSLog(@"Wait a minute, save failed? ....");
     }
+}
+
+- (void)dealloc {
+    AudioServicesDisposeSystemSoundID(_moveSoundId);
 }
 
 @end

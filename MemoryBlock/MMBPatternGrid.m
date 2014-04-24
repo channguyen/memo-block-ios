@@ -54,7 +54,7 @@ static const int PGMarkRemoved = 2;
     [self freeGrid];
     _grid = [self allocateNewGrid:row column:column];
     _count = [self.algorithmDelegate generateGrid:_grid row:row column:column];
-    _score = _count * 100;
+    _score = _count * 5;
 }
 
 - (BOOL)isMarkedAtRow:(NSInteger)row column:(NSInteger)column {
