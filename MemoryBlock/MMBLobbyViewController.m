@@ -29,10 +29,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view setBackgroundColor:UICOLOR_HEX(0xE6D8CC)];
-    [self.buttonHighscore setTitleColor:UICOLOR_HEX(0xff888a85) forState:UIControlStateNormal];
-    [self.buttonResume setTitleColor:UICOLOR_HEX(0xff888a85) forState:UIControlStateNormal];
-    [self.buttonNewGame setTitleColor:UICOLOR_HEX(0xff888a85) forState:UIControlStateNormal];
-    [self.buttonSettings setTitleColor:UICOLOR_HEX(0xff888a85) forState:UIControlStateNormal];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -45,10 +41,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.navigationController pushViewController:vc animated:YES];
     });
-}
-
-- (IBAction)resumeClick:(id)sender {
-    
 }
 
 - (IBAction)settingsClick:(id)sender {

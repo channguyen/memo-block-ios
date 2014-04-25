@@ -37,6 +37,7 @@
 		64B5C10A19048FD100F3FA43 /* MMBHighScoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B5C10919048FD100F3FA43 /* MMBHighScoreViewController.m */; };
 		64B5C11D19049CAA00F3FA43 /* MMBScoreViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B5C11B19049CAA00F3FA43 /* MMBScoreViewCell.m */; };
 		64B5C11E19049CAA00F3FA43 /* MMBScoreViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64B5C11C19049CAA00F3FA43 /* MMBScoreViewCell.xib */; };
+		64BEE480190A347F0008BBF3 /* block.png in Resources */ = {isa = PBXBuildFile; fileRef = 64BEE47F190A347F0008BBF3 /* block.png */; };
 		64E93A431907931700852ECF /* MMBCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 64E93A421907931700852ECF /* MMBCell.m */; };
 		64E93AF11908E9AC00852ECF /* tap.aif in Resources */ = {isa = PBXBuildFile; fileRef = 64E93AF01908E63600852ECF /* tap.aif */; };
 /* End PBXBuildFile section */
@@ -96,6 +97,7 @@
 		64B5C11A19049CAA00F3FA43 /* MMBScoreViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMBScoreViewCell.h; sourceTree = "<group>"; };
 		64B5C11B19049CAA00F3FA43 /* MMBScoreViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMBScoreViewCell.m; sourceTree = "<group>"; };
 		64B5C11C19049CAA00F3FA43 /* MMBScoreViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MMBScoreViewCell.xib; sourceTree = "<group>"; };
+		64BEE47F190A347F0008BBF3 /* block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block.png; sourceTree = "<group>"; };
 		64E93A411907931700852ECF /* MMBCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMBCell.h; sourceTree = "<group>"; };
 		64E93A421907931700852ECF /* MMBCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMBCell.m; sourceTree = "<group>"; };
 		64E93AEE1908D86B00852ECF /* MMBColorUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMBColorUtility.h; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				645AA83A1903AC6F00B84AC4 /* MMBAppDelegate.h */,
 				645AA83B1903AC6F00B84AC4 /* MMBAppDelegate.m */,
 				645AA8401903AC6F00B84AC4 /* Images.xcassets */,
+				64BEE47F190A347F0008BBF3 /* block.png */,
 				645AA83D1903AC6F00B84AC4 /* MemoryBlock.xcdatamodeld */,
 				645AA8321903AC6F00B84AC4 /* Supporting Files */,
 			);
@@ -356,6 +359,7 @@
 			files = (
 				64E93AF11908E9AC00852ECF /* tap.aif in Resources */,
 				64B5C11E19049CAA00F3FA43 /* MMBScoreViewCell.xib in Resources */,
+				64BEE480190A347F0008BBF3 /* block.png in Resources */,
 				645AA8761903B72700B84AC4 /* MMBScoreView.xib in Resources */,
 				645AA8741903B6E500B84AC4 /* MMBGameViewController.xib in Resources */,
 				6449CF591904BA2C00880E97 /* MMBSettingsViewController.xib in Resources */,

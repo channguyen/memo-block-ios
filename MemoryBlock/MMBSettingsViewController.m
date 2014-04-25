@@ -7,6 +7,7 @@
 //
 
 #import "MMBSettingsViewController.h"
+#import "MMBColorUtility.h"
 
 @interface MMBSettingsViewController ()
 
@@ -42,6 +43,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.view setBackgroundColor:UICOLOR_HEX(0xE6D8CC)];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [self.soundSwitch setOn:[defaults boolForKey:@"soundSwitch"]];
     [self.clockSwitch setOn:[defaults boolForKey:@"clockSwitch"]];

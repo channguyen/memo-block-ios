@@ -7,6 +7,7 @@
 //
 
 #import "MMBScoreViewCell.h"
+#import "MMBColorUtility.h"
 
 @implementation MMBScoreViewCell
 

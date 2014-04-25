@@ -24,7 +24,7 @@ static const int GVMinimumRow = 4;
 static const int GVMinimumColumn = 4;
 static const int GVMaximumRow = 6;
 static const int GVMaximumColumn = 6;
-static const int GVTotalNumberOfGame = 10;
+static const int GVTotalNumberOfGame = 1;
 
 @interface MMBGameViewController () {
     MMBPatternGrid *_patternGrid;
@@ -136,6 +136,25 @@ static const int GVTotalNumberOfGame = 10;
     }
 }
 
+- (NSString *)currentDateTimeString {
+    NSDate* date = [NSDate date];
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterLongStyle];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString* dateString = [formatter stringFromDate:date];
+    return dateString;
+}
+
+- (void)saveScore:(NSInteger)score {
+    HighScore *hs = [NSEntityDescription insertNewObjectForEntityForName:@"HighScore" inManagedObjectContext:self.managedObjectContext];
+    hs.score = [NSNumber numberWithInt:score];
+    hs.date = [self currentDateTimeString];
+    NSError *error;
+    if (![self.managedObjectContext save:&error]) {
+        NSLog(@"Wait a minute, save failed? ....");
+    }    
+}
+
 - (void)makeNewGame {
     _currentNumberOfRow = GVMinimumRow;
     _currentNumberOfColumn = GVMinimumColumn;
@@ -164,6 +183,9 @@ static const int GVTotalNumberOfGame = 10;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSInteger bestScore = [defaults integerForKey:@"bestScore"];
     NSInteger currentScore = self.currentScoreView.score;
+    if (currentScore > 0) {
+        [self saveScore:currentScore];
+    }
     if (currentScore > bestScore) {
         bestScore = currentScore;
         [defaults setInteger:bestScore forKey:@"bestScore"];
