@@ -8,6 +8,8 @@
             <connections>
                 <outlet property="bestScoreView" destination="4Jr-2e-Nc1" id="EyW-V9-Zd1"/>
                 <outlet property="currentScoreView" destination="Zg6-vs-GnX" id="Vzj-AA-MQj"/>
+                <outlet property="labelClock" destination="gvd-r4-nWH" id="L3z-Ir-LhB"/>
+                <outlet property="labelGameTitle" destination="S8F-XB-DNt" id="ZC2-CT-doG"/>
                 <outlet property="patternView" destination="GnK-tp-m5n" id="NVX-FL-ItA"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -44,6 +46,13 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                     <color key="textColor" red="0.60000002384185791" green="0.60000002384185791" blue="0.60000002384185791" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="10:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gvd-r4-nWH">
+                    <rect key="frame" x="94" y="519" width="132" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.20000000000000001" green="0.59999999999999998" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>

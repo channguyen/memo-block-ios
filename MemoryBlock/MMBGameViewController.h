@@ -15,7 +15,8 @@
 @property (strong, nonatomic) IBOutlet MMBScoreView *currentScoreView;
 @property (strong, nonatomic) IBOutlet MMBScoreView *bestScoreView;
 @property (strong, nonatomic) IBOutlet MMBPatternView *patternView;
-@property (strong, nonatomic) IBOutlet MMBPatternView *labelGameTitle;
+@property (strong, nonatomic) IBOutlet UILabel *labelGameTitle;
+@property (strong, nonatomic) IBOutlet UILabel *labelClock;
 
 - (IBAction)nextClick:(id)sender;
 

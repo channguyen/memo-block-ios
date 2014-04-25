@@ -82,6 +82,12 @@ static const int GVTotalNumberOfGame = 1;
     // Set up game sound
     NSURL *moveSoundURL = [[NSBundle mainBundle] URLForResource:@"tap" withExtension: @"aif"];
     AudioServicesCreateSystemSoundID((__bridge CFURLRef)moveSoundURL, &_moveSoundId);
+    
+    // Check settings
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL enableSound = [defaults boolForKey:@"soundSwitch"];
+    BOOL enableClock = [defaults boolForKey:@"clockSwitch"];
+    [self.labelClock setHidden:!enableClock];
 }
 
 - (void)playMoveSound {
