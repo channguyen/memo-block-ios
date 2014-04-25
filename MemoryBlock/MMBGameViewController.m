@@ -19,6 +19,7 @@
 
 static const double GVClearBlockDelayTime = 2.0;
 static const double GVNextGameDelayTime = 1.0;
+static const double GVClockTickTime = 1.0;
 
 static const int GVMinimumRow = 4;
 static const int GVMinimumColumn = 4;
@@ -32,10 +33,7 @@ static const int GVTotalNumberOfGame = 1;
     int _currentNumberOfColumn;
     int _currentGameCount;
     int _currentScore;
-    
-    SystemSoundID _moveSoundId;
-    SystemSoundID _wrongMoveSoundId;
-    SystemSoundID _completeMoveSoundId;
+    long _clockTime;
 }
 
 @property (retain, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -79,21 +77,39 @@ static const int GVTotalNumberOfGame = 1;
     // Schedule a new timer to clear all the blocks
     [NSTimer scheduledTimerWithTimeInterval:GVClearBlockDelayTime target:self selector:@selector(clearBlocks:) userInfo:nil repeats:NO];
     
-    // Set up game sound
-    NSURL *moveSoundURL = [[NSBundle mainBundle] URLForResource:@"tap" withExtension: @"aif"];
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef)moveSoundURL, &_moveSoundId);
+    // Initialize sound manager
+    _soundManager = [[MMBSoundManager alloc] init];
     
     // Check settings
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     BOOL enableSound = [defaults boolForKey:@"soundSwitch"];
+    self.soundManager.mute = !enableSound;
     BOOL enableClock = [defaults boolForKey:@"clockSwitch"];
-    [self.labelClock setHidden:!enableClock];
+    self.labelClock.hidden = !enableClock;
+    if (enableClock) {
+        _clockTime = 0;
+        [NSTimer scheduledTimerWithTimeInterval:GVClockTickTime target:self selector:@selector(tick:) userInfo:nil repeats:YES];
+    }
 }
 
-- (void)playMoveSound {
-    AudioServicesPlaySystemSound(_moveSoundId);
+//
+// TODO: Rework this method
+//
+- (void)tick:(NSTimer *)timer {
+    _clockTime++;
+    int min = 0;
+    int sec = 0;
+    if (_clockTime > 60) {
+        min = (int)(_clockTime / 60);
+        sec = (int)(_clockTime % 60);
+    } else {
+        sec = (int)_clockTime;
+        min = 0;
+    }
+    NSLog(@"Tick %d %d", sec, min);
+    [self.labelClock setText:[NSString stringWithFormat:@"%02d:%02d", min, sec]];
 }
-     
+
 - (void)clearBlocks:(NSTimer *)timer {
     [_patternView acceptTouchesAndClearBlock];
 }
@@ -179,7 +195,7 @@ static const int GVTotalNumberOfGame = 1;
 }
 
 - (void)showCongratsDialog {
-    NSString *msg = [NSString stringWithFormat:@"Your new highscore %d", self.currentScoreView.score];
+    NSString *msg = [NSString stringWithFormat:@"Your new highscore %d", (int)self.currentScoreView.score];
     UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Congratulation!"
                                                       message:msg
                                                      delegate:self
@@ -212,7 +228,7 @@ static const int GVTotalNumberOfGame = 1;
 }
 
 - (void)patternView:(MMBPatternView *)patternView makeMoveAtCell:(MMBCell *)cell {
-    [self playMoveSound];
+    [_soundManager playMoveSound];
     [_patternGrid removeMarkAt:cell.row column:cell.column];
     if ([self isWrongMoveCell:cell]) {
         [_patternView setActiveCell:cell toState:LOST];
@@ -233,19 +249,8 @@ static const int GVTotalNumberOfGame = 1;
     [_patternView setNeedsDisplay];
 }
 
-- (void)nextClick:(id)sender {
-    [self.currentScoreView addScoreToCurrent:4];
-    HighScore *hs = [NSEntityDescription insertNewObjectForEntityForName:@"HighScore" inManagedObjectContext:self.managedObjectContext];
-    hs.score = [NSNumber numberWithInt:2048];
-    hs.date = @"04-02-2014";
-    NSError *error;
-    if (![self.managedObjectContext save:&error]) {
-        NSLog(@"Wait a minute, save failed? ....");
-    }
-}
-
 - (void)dealloc {
-    AudioServicesDisposeSystemSoundID(_moveSoundId);
+    [_soundManager dispose];
 }
 
 @end

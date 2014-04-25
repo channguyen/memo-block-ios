@@ -88,11 +88,11 @@
     NSCalendar *calendar = [NSCalendar currentCalendar];
     unsigned int flags = NSHourCalendarUnit | NSMinuteCalendarUnit | NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit;
     NSDateComponents *component = [calendar components:flags fromDate:date toDate:now options:0];
-    int year = [component year];
-    int month = [component month];
-    int day = [component day];
-    int hour = [component hour];
-    int minute = [component minute];
+    int year = (int)[component year];
+    int month = (int)[component month];
+    int day = (int)[component day];
+    int hour = (int)[component hour];
+    int minute = (int)[component minute];
     if (year > 0) {
         return [NSString stringWithFormat:@"%d years ago", year];
     }
@@ -112,7 +112,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *msg = [NSString stringWithFormat:@"Select row= %d", indexPath.row];
+    NSString *msg = [NSString stringWithFormat:@"Select row= %d", (int)indexPath.row];
     NSLog(@"%@", msg);
 }
 

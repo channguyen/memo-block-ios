@@ -38,6 +38,7 @@
 		64B5C11D19049CAA00F3FA43 /* MMBScoreViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B5C11B19049CAA00F3FA43 /* MMBScoreViewCell.m */; };
 		64B5C11E19049CAA00F3FA43 /* MMBScoreViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64B5C11C19049CAA00F3FA43 /* MMBScoreViewCell.xib */; };
 		64BEE480190A347F0008BBF3 /* block.png in Resources */ = {isa = PBXBuildFile; fileRef = 64BEE47F190A347F0008BBF3 /* block.png */; };
+		64C5C7D5190AC9820080869F /* MMBSoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 64C5C7D4190AC9820080869F /* MMBSoundManager.m */; };
 		64E93A431907931700852ECF /* MMBCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 64E93A421907931700852ECF /* MMBCell.m */; };
 		64E93AF11908E9AC00852ECF /* tap.aif in Resources */ = {isa = PBXBuildFile; fileRef = 64E93AF01908E63600852ECF /* tap.aif */; };
 /* End PBXBuildFile section */
@@ -98,6 +99,8 @@
 		64B5C11B19049CAA00F3FA43 /* MMBScoreViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMBScoreViewCell.m; sourceTree = "<group>"; };
 		64B5C11C19049CAA00F3FA43 /* MMBScoreViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MMBScoreViewCell.xib; sourceTree = "<group>"; };
 		64BEE47F190A347F0008BBF3 /* block.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block.png; sourceTree = "<group>"; };
+		64C5C7D3190AC9820080869F /* MMBSoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMBSoundManager.h; sourceTree = "<group>"; };
+		64C5C7D4190AC9820080869F /* MMBSoundManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMBSoundManager.m; sourceTree = "<group>"; };
 		64E93A411907931700852ECF /* MMBCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMBCell.h; sourceTree = "<group>"; };
 		64E93A421907931700852ECF /* MMBCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMBCell.m; sourceTree = "<group>"; };
 		64E93AEE1908D86B00852ECF /* MMBColorUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMBColorUtility.h; sourceTree = "<group>"; };
@@ -246,6 +249,8 @@
 				6449CF551904BA2C00880E97 /* MMBSettingsViewController.h */,
 				6449CF561904BA2C00880E97 /* MMBSettingsViewController.m */,
 				6449CF571904BA2C00880E97 /* MMBSettingsViewController.xib */,
+				64C5C7D3190AC9820080869F /* MMBSoundManager.h */,
+				64C5C7D4190AC9820080869F /* MMBSoundManager.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -397,6 +402,7 @@
 				645AA83C1903AC6F00B84AC4 /* MMBAppDelegate.m in Sources */,
 				645AA86D1903B53D00B84AC4 /* MMBRandomGridGenerator.m in Sources */,
 				64E93A431907931700852ECF /* MMBCell.m in Sources */,
+				64C5C7D5190AC9820080869F /* MMBSoundManager.m in Sources */,
 				645AA8711903B67A00B84AC4 /* MMBGameViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
