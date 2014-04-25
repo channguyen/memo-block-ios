@@ -34,6 +34,7 @@ static const int GVTotalNumberOfGame = 1;
     int _currentGameCount;
     int _currentScore;
     long _clockTime;
+    NSTimer *_clockTimer;
 }
 
 @property (retain, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -65,11 +66,7 @@ static const int GVTotalNumberOfGame = 1;
     [_currentScoreView setCurrentScore:0];
     [_bestScoreView setHeaderLabel:@"Best Score"];
     [_bestScoreView setCurrentScore:[[NSUserDefaults standardUserDefaults] integerForKey:@"bestScore"]];
-    
-    // Set new grid now
-    _patternView.delegate = self;
-    [self makeNewGameWithRow:_currentNumberOfRow column:_currentNumberOfColumn];
-    
+   
     // Load preferences 
     MMBAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     self.managedObjectContext = appDelegate.managedObjectContext;
@@ -80,16 +77,9 @@ static const int GVTotalNumberOfGame = 1;
     // Initialize sound manager
     _soundManager = [[MMBSoundManager alloc] init];
     
-    // Check settings
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    BOOL enableSound = [defaults boolForKey:@"soundSwitch"];
-    self.soundManager.mute = !enableSound;
-    BOOL enableClock = [defaults boolForKey:@"clockSwitch"];
-    self.labelClock.hidden = !enableClock;
-    if (enableClock) {
-        _clockTime = 0;
-        [NSTimer scheduledTimerWithTimeInterval:GVClockTickTime target:self selector:@selector(tick:) userInfo:nil repeats:YES];
-    }
+    // Start new game
+    _patternView.delegate = self;
+    [self makeNewGame];
 }
 
 //
@@ -112,6 +102,24 @@ static const int GVTotalNumberOfGame = 1;
 
 - (void)clearBlocks:(NSTimer *)timer {
     [_patternView acceptTouchesAndClearBlock];
+}
+
+- (void)makeNewGame {
+    _currentNumberOfRow = GVMinimumRow;
+    _currentNumberOfColumn = GVMinimumColumn;
+    _currentGameCount = 0;
+    [self makeNewGameWithRow:_currentNumberOfRow column:_currentNumberOfColumn];
+    
+    // Check settings
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL enableSound = [defaults boolForKey:@"soundSwitch"];
+    self.soundManager.mute = !enableSound;
+    BOOL enableClock = [defaults boolForKey:@"clockSwitch"];
+    self.labelClock.hidden = !enableClock;
+    if (enableClock) {
+        _clockTime = 0;
+        _clockTimer = [NSTimer scheduledTimerWithTimeInterval:GVClockTickTime target:self selector:@selector(tick:) userInfo:nil repeats:YES];
+    }
 }
 
 - (void)makeNewGameWithRow:(NSInteger)row column:(NSInteger)column {
@@ -177,13 +185,6 @@ static const int GVTotalNumberOfGame = 1;
     }    
 }
 
-- (void)makeNewGame {
-    _currentNumberOfRow = GVMinimumRow;
-    _currentNumberOfColumn = GVMinimumColumn;
-    _currentGameCount = 0;
-    [self makeNewGameWithRow:_currentNumberOfRow column:_currentNumberOfColumn];
-}
-
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
     if ([title isEqualToString:@"OK"]) {
@@ -227,6 +228,11 @@ static const int GVTotalNumberOfGame = 1;
     return [_patternGrid numberOfMarkBeingRemoved] == [_patternGrid count];
 }
 
+- (void)resetClockTimer {
+    [_clockTimer invalidate];
+    _clockTimer = nil;
+}
+
 - (void)patternView:(MMBPatternView *)patternView makeMoveAtCell:(MMBCell *)cell {
     [_soundManager playMoveSound];
     [_patternGrid removeMarkAt:cell.row column:cell.column];
@@ -236,6 +242,7 @@ static const int GVTotalNumberOfGame = 1;
         [_patternView rejectTouches];
         NSDictionary *lastMoveInfo = @{@"state" : [NSNumber numberWithInt:LOST]};
         [NSTimer scheduledTimerWithTimeInterval:GVNextGameDelayTime target:self selector:@selector(makeNextGame:) userInfo:lastMoveInfo repeats:NO];
+        [self resetClockTimer];
     } else if ([self isWinningMoveCell:cell]) {
         [_patternView setActiveCell:cell toState:WON];
         [_patternView displayPattern];
@@ -243,8 +250,8 @@ static const int GVTotalNumberOfGame = 1;
         NSDictionary *lastMoveInfo = @{@"state" : [NSNumber numberWithInt:WON]};
         [NSTimer scheduledTimerWithTimeInterval:GVNextGameDelayTime target:self selector:@selector(makeNextGame:) userInfo:lastMoveInfo repeats:NO];
         _currentScore += _patternGrid.score;
-        NSLog(@"current score = %d", _currentScore);
         [_currentScoreView addScoreToCurrent:_patternGrid.score];
+        [self resetClockTimer];
     }
     [_patternView setNeedsDisplay];
 }
