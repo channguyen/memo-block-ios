@@ -162,11 +162,6 @@ static const int GVTotalGameTime = 61;
     return currentColumn;
 }
 
-- (void)makeNextGame:(NSTimer *)timer {
-    NSDictionary *lastMoveInfo = [timer userInfo];
-    MoveState state = [lastMoveInfo[@"state"] intValue];
-}
-
 - (NSString *)currentDateTimeString {
     NSDate* date = [NSDate date];
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
@@ -178,7 +173,7 @@ static const int GVTotalGameTime = 61;
 
 - (void)saveScore:(NSInteger)score {
     HighScore *hs = [NSEntityDescription insertNewObjectForEntityForName:@"HighScore" inManagedObjectContext:self.managedObjectContext];
-    hs.score = [NSNumber numberWithInt:score];
+    hs.score = [NSNumber numberWithInteger:score];
     hs.date = [self currentDateTimeString];
     NSError *error;
     if (![self.managedObjectContext save:&error]) {
@@ -241,7 +236,6 @@ static const int GVTotalGameTime = 61;
     if (clockCounter < GVTotalGameTime) {
         dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(GVNextGameDelayTime * NSEC_PER_SEC));
         dispatch_after(time, dispatch_get_main_queue(), ^(void) {
-            NSLog(@"go to next game now..");
             if (state == LOST) {
                 [self startNewGameWithRow:currentRow column:currentColumn];
             } else {
