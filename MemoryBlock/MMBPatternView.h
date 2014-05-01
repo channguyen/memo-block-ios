@@ -27,10 +27,9 @@ typedef NS_ENUM(NSInteger, MoveState) {
 @interface MMBPatternView : UIView
 
 @property (unsafe_unretained) id<MMBPatternViewDelegate> delegate;
+@property (assign, atomic) BOOL touchable;
+@property (assign, atomic) BOOL showPattern;
 
-- (void)acceptTouchesAndClearBlock;
-- (void)rejectTouches;
-- (void)displayPattern;
 - (void)setPatternGrid:(MMBPatternGrid *)patternGrid;
 - (void)setActiveCell:(MMBCell *)cell toState:(MoveState)state;
 

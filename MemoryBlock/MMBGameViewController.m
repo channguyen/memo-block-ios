@@ -16,25 +16,28 @@
 #import "MMBCell.h"
 #import "MMBScoreView.h"
 #import "MMBColorUtility.h"
+#import "NSTimer+Block.h"
 
-static const double GVClearBlockDelayTime = 2.0;
-static const double GVNextGameDelayTime = 1.0;
+static const double GVClearBlockDelayTime = 1.0;
+static const double GVNextGameDelayTime = 0.5;
 static const double GVClockTickTime = 1.0;
 
-static const int GVMinimumRow = 4;
-static const int GVMinimumColumn = 4;
-static const int GVMaximumRow = 6;
-static const int GVMaximumColumn = 6;
-static const int GVTotalNumberOfGame = 1;
+static const int GVMinimumRow = 3;
+static const int GVMinimumColumn = 3;
+static const int GVMaximumRow = 5;
+static const int GVMaximumColumn = 5;
+static const int GVTotalGameTime = 61;
 
 @interface MMBGameViewController () {
-    MMBPatternGrid *_patternGrid;
-    int _currentNumberOfRow;
-    int _currentNumberOfColumn;
-    int _currentGameCount;
-    int _currentScore;
-    long _clockTime;
-    NSTimer *_clockTimer;
+    int currentRow;
+    int currentColumn;
+    int currentScore;
+    int clockCounter;
+    
+    NSTimer *clockTimer;
+    
+    MMBSoundManager *soundManager;
+    MMBPatternGrid *patternGrid;
 }
 
 @property (retain, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -55,115 +58,113 @@ static const int GVTotalNumberOfGame = 1;
     [super viewDidLoad];
     
     [self.view setBackgroundColor:UICOLOR_HEX(0xE6D8CC)];
-    [_patternView setBackgroundColor:UICOLOR_HEX(0xE6D8CC)];
-    
-    _currentNumberOfRow = GVMinimumRow;
-    _currentNumberOfColumn = GVMinimumColumn;
-    _currentScore = 0;
+    [self.patternView setBackgroundColor:UICOLOR_HEX(0xE6D8CC)];
     
     // Set up score label
-    [_currentScoreView setHeaderLabel:@"Score"];
-    [_currentScoreView setCurrentScore:0];
-    [_bestScoreView setHeaderLabel:@"Best Score"];
-    [_bestScoreView setCurrentScore:[[NSUserDefaults standardUserDefaults] integerForKey:@"bestScore"]];
+    [self.currentScoreView setHeaderLabel:@"Score"];
+    [self.currentScoreView setCurrentScore:0];
+    [self.bestScoreView setHeaderLabel:@"Best Score"];
+    [self.bestScoreView setCurrentScore:[[NSUserDefaults standardUserDefaults] integerForKey:@"bestScore"]];
    
     // Load preferences 
     MMBAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     self.managedObjectContext = appDelegate.managedObjectContext;
     
-    // Schedule a new timer to clear all the blocks
-    [NSTimer scheduledTimerWithTimeInterval:GVClearBlockDelayTime target:self selector:@selector(clearBlocks:) userInfo:nil repeats:NO];
-    
-    // Initialize sound manager
-    _soundManager = [[MMBSoundManager alloc] init];
+   // Initialize sound manager
+    soundManager = [[MMBSoundManager alloc] init];
     
     // Start new game
-    _patternView.delegate = self;
-    [self makeNewGame];
-}
-
-//
-// TODO: Rework this method
-//
-- (void)tick:(NSTimer *)timer {
-    _clockTime++;
-    int min = 0;
-    int sec = 0;
-    if (_clockTime > 60) {
-        min = (int)(_clockTime / 60);
-        sec = (int)(_clockTime % 60);
-    } else {
-        sec = (int)_clockTime;
-        min = 0;
-    }
-    NSLog(@"Tick %d %d", sec, min);
-    [self.labelClock setText:[NSString stringWithFormat:@"%02d:%02d", min, sec]];
-}
-
-- (void)clearBlocks:(NSTimer *)timer {
-    [_patternView acceptTouchesAndClearBlock];
-}
-
-- (void)makeNewGame {
-    _currentNumberOfRow = GVMinimumRow;
-    _currentNumberOfColumn = GVMinimumColumn;
-    _currentGameCount = 0;
-    [self makeNewGameWithRow:_currentNumberOfRow column:_currentNumberOfColumn];
+    self.patternView.delegate = self;
     
-    // Check settings
+    // Check for new settings
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     BOOL enableSound = [defaults boolForKey:@"soundSwitch"];
-    self.soundManager.mute = !enableSound;
+    soundManager.mute = !enableSound;
     BOOL enableClock = [defaults boolForKey:@"clockSwitch"];
     self.labelClock.hidden = !enableClock;
-    if (enableClock) {
-        _clockTime = 0;
-        _clockTimer = [NSTimer scheduledTimerWithTimeInterval:GVClockTickTime target:self selector:@selector(tick:) userInfo:nil repeats:YES];
+    
+    // Launch new game now
+    [self restartNewGame];
+}
+
+- (void)restartNewGame {
+    currentRow = GVMinimumRow;
+    currentColumn = GVMinimumColumn;
+    currentScore = 0;
+    clockCounter = 0;
+    [self startNewGameWithRow:currentRow column:currentColumn];
+    __weak MMBGameViewController *weakSelf = self;
+    clockTimer = [NSTimer scheduledTimerWithTimeInterval:GVClockTickTime 
+                                                   block:^{
+                                                       MMBGameViewController *strongSelf = weakSelf;
+                                                       [strongSelf tick];
+                                                   }
+                                                 repeats:YES];
+                                                
+}
+
+- (void)clearBlock:(NSTimer *)timer {
+    NSLog(@"clearBlock:timer");
+    self.patternView.showPattern = NO;
+    self.patternView.touchable = YES;
+    [self.patternView setNeedsDisplay];
+}
+
+- (void)tick {
+    clockCounter++;
+    if (clockCounter < GVTotalGameTime) {
+        [self.labelClock setText:[NSString stringWithFormat:@"00:%02d", clockCounter]];
+    } else {
+        [clockTimer invalidate];
+        [self.labelClock setText:@"Time out"];
+        self.patternView.touchable = NO;
+        self.patternView.showPattern = NO;
+        [self.patternView setNeedsDisplay];
+        [self showCongratsDialog];
     }
 }
 
-- (void)makeNewGameWithRow:(NSInteger)row column:(NSInteger)column {
-    _currentScore = 0;
-    _patternGrid = [[MMBPatternGrid alloc] initWithRow:row column:column];
-    [_patternView setPatternGrid:_patternGrid];
-    [_patternView setActiveCell:[[MMBCell alloc] initWithRow:-1 column:-1] toState:NEUTRAL];
-    [_patternView setNeedsDisplay];
-    [NSTimer scheduledTimerWithTimeInterval:GVClearBlockDelayTime target:self selector:@selector(clearBlocks:) userInfo:nil repeats:NO];
+- (void)setUpNewPatternWithRow:(NSInteger)row column:(NSInteger)column {
+    MMBCell *cell = [[MMBCell alloc] initWithRow:-1 column:-1];
+    [self.patternView setActiveCell:cell toState:NEUTRAL];
+    patternGrid = [[MMBPatternGrid alloc] initWithRow:row column:column];
+    [patternGrid generateNewGrid:row column:column];
+    [self.patternView setPatternGrid:patternGrid];
+    self.patternView.touchable = NO;
+    self.patternView.showPattern = YES;
+    [self.patternView setNeedsDisplay];
+}
+
+- (void)startNewGameWithRow:(NSInteger)row column:(NSInteger)column {
+    [self setUpNewPatternWithRow:row column:column];
+    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(GVClearBlockDelayTime * NSEC_PER_SEC));
+    dispatch_after(time, dispatch_get_main_queue(), ^(void) {
+        NSLog(@"Hide pattern now...");
+        self.patternView.showPattern = NO;
+        self.patternView.touchable = YES;
+        [self.patternView setNeedsDisplay];    
+    });
 }
 
 - (int)nextRow {
-    _currentNumberOfRow++;
-    if (_currentNumberOfRow > GVMaximumRow) {
-        _currentNumberOfRow = GVMaximumRow;
+    currentRow++;
+    if (currentRow > GVMaximumRow) {
+        currentRow = GVMaximumRow;
     }
-    return _currentNumberOfRow;
+    return currentRow;
 }
 
 - (int)nextColumn {
-    _currentNumberOfColumn++;
-    if (_currentNumberOfColumn > GVMaximumColumn) {
-        _currentNumberOfColumn = GVMaximumColumn;
+    currentColumn++;
+    if (currentColumn > GVMaximumColumn) {
+        currentColumn = GVMaximumColumn;
     }
-    return _currentNumberOfColumn;
-}
-
-- (BOOL)isLastGame {
-    return _currentGameCount == GVTotalNumberOfGame;
+    return currentColumn;
 }
 
 - (void)makeNextGame:(NSTimer *)timer {
     NSDictionary *lastMoveInfo = [timer userInfo];
     MoveState state = [lastMoveInfo[@"state"] intValue];
-    _currentGameCount++;
-    if ([self isLastGame]) {
-        [self showCongratsDialog];
-    } else {
-        if (state == WON) {
-            [self makeNewGameWithRow:[self nextRow] column:[self nextColumn]];
-        } else {
-            [self makeNewGameWithRow:_currentNumberOfRow column:_currentNumberOfColumn];
-        }
-    }
 }
 
 - (NSString *)currentDateTimeString {
@@ -185,35 +186,36 @@ static const int GVTotalNumberOfGame = 1;
     }    
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
-    if ([title isEqualToString:@"OK"]) {
-        NSInteger bestScore = [[NSUserDefaults standardUserDefaults] integerForKey:@"bestScore"];
-        [self.currentScoreView setCurrentScore:0];
-        [self.bestScoreView setCurrentScore:bestScore];
-        [self makeNewGame];
-    }
-}
-
 - (void)showCongratsDialog {
-    NSString *msg = [NSString stringWithFormat:@"Your new highscore %d", (int)self.currentScoreView.score];
+    NSString *msg = [NSString stringWithFormat:@"Your new highscore %d. Play another game?", (int)self.currentScoreView.score];
     UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Congratulation!"
                                                       message:msg
                                                      delegate:self
-                                            cancelButtonTitle:@"OK"
-                                            otherButtonTitles:nil];
+                                            cancelButtonTitle:@"Cancel"
+                                            otherButtonTitles:@"Yes", 
+                                            nil];
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSInteger bestScore = [defaults integerForKey:@"bestScore"];
-    NSInteger currentScore = self.currentScoreView.score;
+    // We only update the score if it's > 0
     if (currentScore > 0) {
         [self saveScore:currentScore];
     }
     if (currentScore > bestScore) {
         bestScore = currentScore;
+        [self.bestScoreView setScore:bestScore];
         [defaults setInteger:bestScore forKey:@"bestScore"];
     }
     [message show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
+    if ([title isEqualToString:@"Cancel"]) {
+        [alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
+    } else {
+        [self restartNewGame];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -221,43 +223,56 @@ static const int GVTotalNumberOfGame = 1;
 }
 
 - (BOOL)isWrongMoveCell:(MMBCell *)cell {
-    return ![_patternGrid isMarkedAtRow:cell.row column:cell.column];
+    return ![patternGrid isMarkedAtRow:cell.row column:cell.column];
 }
 
 - (BOOL)isWinningMoveCell:(MMBCell *)cell {
-    return [_patternGrid numberOfMarkBeingRemoved] == [_patternGrid count];
+    return [patternGrid numberOfMarkBeingRemoved] == [patternGrid count];
 }
 
 - (void)resetClockTimer {
-    [_clockTimer invalidate];
-    _clockTimer = nil;
+    [clockTimer invalidate];
+    clockTimer = nil;
+}
+
+- (void)goToNextGameFromState:(MoveState)state {
+    self.patternView.touchable = NO;
+    self.patternView.showPattern = YES;
+    if (clockCounter < GVTotalGameTime) {
+        dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(GVNextGameDelayTime * NSEC_PER_SEC));
+        dispatch_after(time, dispatch_get_main_queue(), ^(void) {
+            NSLog(@"go to next game now..");
+            if (state == LOST) {
+                [self startNewGameWithRow:currentRow column:currentColumn];
+            } else {
+                [self startNewGameWithRow:[self nextRow] column:[self nextColumn]];
+            }
+        });
+    }
 }
 
 - (void)patternView:(MMBPatternView *)patternView makeMoveAtCell:(MMBCell *)cell {
-    [_soundManager playMoveSound];
-    [_patternGrid removeMarkAt:cell.row column:cell.column];
+    [soundManager playMoveSound];
+    [patternGrid removeMarkAt:cell.row column:cell.column];
     if ([self isWrongMoveCell:cell]) {
-        [_patternView setActiveCell:cell toState:LOST];
-        [_patternView displayPattern];
-        [_patternView rejectTouches];
-        NSDictionary *lastMoveInfo = @{@"state" : [NSNumber numberWithInt:LOST]};
-        [NSTimer scheduledTimerWithTimeInterval:GVNextGameDelayTime target:self selector:@selector(makeNextGame:) userInfo:lastMoveInfo repeats:NO];
-        [self resetClockTimer];
+        [self.patternView setActiveCell:cell toState:LOST];
+        [self goToNextGameFromState:LOST];
     } else if ([self isWinningMoveCell:cell]) {
-        [_patternView setActiveCell:cell toState:WON];
-        [_patternView displayPattern];
-        [_patternView rejectTouches];
-        NSDictionary *lastMoveInfo = @{@"state" : [NSNumber numberWithInt:WON]};
-        [NSTimer scheduledTimerWithTimeInterval:GVNextGameDelayTime target:self selector:@selector(makeNextGame:) userInfo:lastMoveInfo repeats:NO];
-        _currentScore += _patternGrid.score;
-        [_currentScoreView addScoreToCurrent:_patternGrid.score];
-        [self resetClockTimer];
+        [self.patternView setActiveCell:cell toState:WON];
+        currentScore += patternGrid.score;
+        [self.currentScoreView addScoreToCurrent:patternGrid.score];
+        [self goToNextGameFromState:WON];
     }
-    [_patternView setNeedsDisplay];
+    [self.patternView setNeedsDisplay];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:YES];
 }
 
 - (void)dealloc {
-    [_soundManager dispose];
+    NSLog(@"dealloc");
+    [soundManager dispose];
 }
 
 @end

@@ -22,8 +22,6 @@ static const float MMBThickness = 6.0f;
     UIColor *_wrongSquareColor;
     UIImage *_crossImage;
     UIImage *_checkImage;
-    BOOL _touchable;
-    BOOL _patternShow;
     BOOL _madeWrongMove;
     MMBCell *_activeCell;
     MoveState _moveState;
@@ -43,7 +41,7 @@ static const float MMBThickness = 6.0f;
     _wrongSquareColor = HEX(0x000000);
     _activeCell = [[MMBCell alloc] initWithRow:-1 column:-1];
     _touchable = NO;
-    _patternShow = YES;
+    _showPattern = YES;
     _madeWrongMove = NO;
     _moveState = WON;
     _crossImage = [UIImage imageNamed:@"wrong_marker.png"];
@@ -102,7 +100,7 @@ static const float MMBThickness = 6.0f;
 - (void)drawSquare:(CGRect)rect inContext:(CGContextRef) context atCell:(MMBCell *) cell{
     CGPathRef path = CGPathCreateWithRect(rect, NULL);
     [_borderColor setStroke];
-    if (_patternShow) {
+    if (_showPattern) {
         if ([_patternGrid isMarkedAtRow:cell.row column:cell.column]) {
             [_patternSquareColor setFill];
         } else {
@@ -154,26 +152,6 @@ static const float MMBThickness = 6.0f;
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     // NSLog(@"touchesEnded");
-}
-
-- (void)acceptTouchesAndClearBlock {
-    @synchronized (self) {
-        _touchable = YES;
-        _patternShow = NO;
-    }
-    [self setNeedsDisplay];
-}
-
-- (void)displayPattern {
-    @synchronized (self) {
-        _patternShow = YES;
-    }
-}
-
-- (void)rejectTouches {
-    @synchronized (self) {
-        _touchable = NO;
-    }
 }
 
 - (void)setActiveCell:(MMBCell *)cell toState:(MoveState)state {

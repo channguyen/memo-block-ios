@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet MMBPatternView *patternView;
 @property (weak, nonatomic) IBOutlet UILabel *labelGameTitle;
 @property (weak, nonatomic) IBOutlet UILabel *labelClock;
-@property (strong, nonatomic) MMBSoundManager *soundManager;
+
+- (void)tick;
 
 @end

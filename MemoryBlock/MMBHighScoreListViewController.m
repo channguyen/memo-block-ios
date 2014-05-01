@@ -1,62 +1,50 @@
-// //  MMBHighScoreViewController.m
-//  MemoryBlock
-//
-//  Created by chan on 4/20/14.
-//  Copyright (c) 2014 chan. All rights reserved.
-//
-
-#import "MMBHighScoreViewController.h"
-#import "MMBScoreViewCell.h"
-#import "MMBAppDelegate.h"
-#import "HighScore.h"
+#import "MMBHighScoreListViewController.h"
 #import "MMBColorUtility.h"
+#import "MMBScoreView.h"
+#import "MMBAppDelegate.h"
+#import "MMBScoreViewCell.h"
+#import "HighScore.h"
 
-@interface MMBHighScoreViewController () {
-    NSMutableArray *_colorArray;
-}
+static NSString* const MMBCellIdentifier = @"MMBCellScoreView";
+
+@interface MMBHighScoreListViewController ()
+
+@property (strong, nonatomic) NSMutableArray *highScoreArray;
+
 @end
 
-@implementation MMBHighScoreViewController
+@implementation MMBHighScoreListViewController
 
-- (instancetype)init {
-    self = [super initWithStyle:UITableViewStylePlain];
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    self = [super initWithNibName:@"MMBHighScoreListViewController" bundle:nil];
     if (self) {
-        UINavigationItem *navigationItem = self.navigationItem;
-        navigationItem.title = @"High Score";
+        self.navigationItem.title = @"High Score";
         _highScoreArray = [[NSMutableArray alloc] init];
-        _colorArray = [[NSMutableArray alloc] init];
-        [_colorArray addObject:UICOLOR_HEX(0xee5e62)];
-        [_colorArray addObject:UICOLOR_HEX(0xee6e1a)];
-        [_colorArray addObject:UICOLOR_HEX(0xd4c5d4)];
-        [_colorArray addObject:UICOLOR_HEX(0xe1533c)];
-        [_colorArray addObject:UICOLOR_HEX(0x00aaee)];
-        [_colorArray addObject:UICOLOR_HEX(0xf2b8b2)];
-        [_colorArray addObject:UICOLOR_HEX(0x108a8e)];
-        [_colorArray addObject:UICOLOR_HEX(0xff5e62)];
-        [_colorArray addObject:UICOLOR_HEX(0xe15100)];
-        [_colorArray addObject:UICOLOR_HEX(0xaa5eb2)];
     }
     return self;
-}
-
-- (instancetype)initWithStyle:(UITableViewStyle)style {
-    return [self init];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view setBackgroundColor:UICOLOR_HEX(0xE6D8CC)];
+    
+    // Set up table view
     UINib *nib = [UINib nibWithNibName:@"MMBScoreViewCell" bundle:nil];
-    [self.tableView registerNib:nib forCellReuseIdentifier:@"MMBScoreViewCell"];
-    MMBAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    self.managedObjectContext = appDelegate.managedObjectContext;
-    _highScoreArray = [[appDelegate fetchAllHighScore] mutableCopy];
+    [self.tableView registerNib:nib forCellReuseIdentifier:MMBCellIdentifier];
+    
+    // Retrieve data
+    MMBAppDelegate *app = [UIApplication sharedApplication].delegate;
+    self.managedObjectContext = app.managedObjectContext;
+    self.highScoreArray = [[app fetchAllHighScore] mutableCopy];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    NSLog(@"viewWillApear");
     [super viewWillAppear:animated];
     [self.tableView reloadData];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -68,13 +56,9 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    MMBScoreViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MMBScoreViewCell" forIndexPath:indexPath];
+    MMBScoreViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MMBCellIdentifier forIndexPath:indexPath];
     HighScore *highScore = _highScoreArray[indexPath.row];
-    int idx = arc4random() % _colorArray.count;
-    NSLog(@"index = %d", idx);
-    [cell.labelScore setTextColor:_colorArray[idx]];
     [cell.labelScore setText:[highScore.score stringValue]];
-    [cell.labelDate setTextColor:_colorArray[idx]];
     [cell.labelDate setText:[self readableTimeStamp:highScore.date]];
     return cell;
 }
@@ -112,8 +96,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *msg = [NSString stringWithFormat:@"Select row= %d", (int)indexPath.row];
-    NSLog(@"%@", msg);
+    
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -123,5 +106,6 @@
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     return NO;
 }
+
 
 @end

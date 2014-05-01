@@ -8,9 +8,9 @@
 
 #import "MMBLobbyViewController.h"
 #import "MMBGameViewController.h"
-#import "MMBHighScoreViewController.h"
 #import "MMBSettingsViewController.h"
 #import "MMBColorUtility.h"
+#import "MMBHighScoreListViewController.h"
 
 @interface MMBLobbyViewController ()
 
@@ -51,7 +51,7 @@
 }
 
 - (IBAction)highscoreClick:(id)sender {
-    MMBHighScoreViewController *vc = [[MMBHighScoreViewController alloc] init];
+    MMBHighScoreListViewController *vc = [[MMBHighScoreListViewController alloc] init];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.navigationController pushViewController:vc animated:YES];
     });

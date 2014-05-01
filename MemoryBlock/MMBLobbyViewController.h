@@ -10,9 +10,9 @@
 
 @interface MMBLobbyViewController : UIViewController
 
-@property (strong, nonatomic) IBOutlet UIButton *buttonNewGame;
-@property (strong, nonatomic) IBOutlet UIButton *buttonSettings;
-@property (strong, nonatomic) IBOutlet UIButton *buttonHighscore;
+@property (weak, nonatomic) IBOutlet UIButton *buttonNewGame;
+@property (weak, nonatomic) IBOutlet UIButton *buttonSettings;
+@property (weak, nonatomic) IBOutlet UIButton *buttonHighscore;
 
 - (IBAction)newGameClick:(id)sender;
 - (IBAction)settingsClick:(id)sender;
